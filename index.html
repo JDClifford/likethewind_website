@@ -162,19 +162,23 @@
   .foot-inner .ig:hover{border-color:var(--clay);}
 
   /* clickable-piece affordance — the "View" badge + hover overlay */
-  .view-badge{position:absolute;right:.6rem;bottom:.6rem;z-index:3;pointer-events:none;
-    display:inline-flex;align-items:center;gap:.4rem;padding:.42rem .68rem;border-radius:999px;
-    background:rgba(20,15,12,.5);color:var(--paper);
-    font-family:var(--sans);font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;font-weight:600;
-    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
-    transition:background .25s ease,transform .25s ease;}
-  .view-badge svg{width:13px;height:13px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  /* clickable-piece affordance — an editorial "view gallery" cue in the site's label style */
+  .gallery-cue{display:inline-flex;align-items:center;gap:.5em;
+    background:none;border:0;padding:0;cursor:pointer;
+    font-family:var(--sans);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;font-weight:600;
+    color:var(--clay-deep);transition:color .2s ease;}
+  .gallery-cue .arr{transition:transform .25s cubic-bezier(.2,.7,.2,1);}
+  .plate-txt .gallery-cue{margin-top:1.3rem;}
+  .fn .gallery-cue{margin-top:.55rem;}
+  /* whisper-soft darken on the photo when its piece is hovered */
   .plate-img::after,.fn .frame::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
-    background:linear-gradient(to top,rgba(20,15,12,.30),transparent 55%);opacity:0;transition:opacity .25s ease;}
+    background:rgba(20,15,12,.16);opacity:0;transition:opacity .3s ease;}
   @media(hover:hover){
-    .plate-img:hover::after,.fn-item:hover .frame::after{opacity:1;}
-    .plate-img:hover .view-badge,.fn-item:hover .view-badge{background:var(--clay-deep);transform:translateY(-2px);}
+    .plate:hover .plate-img::after,.fn-item:hover .frame::after{opacity:1;}
+    .plate:hover .gallery-cue,.fn-item:hover .gallery-cue{color:var(--clay);}
+    .plate:hover .gallery-cue .arr,.fn-item:hover .gallery-cue .arr{transform:translateX(5px);}
   }
+  .gallery-cue:focus-visible{outline:2px solid var(--clay-deep);outline-offset:3px;}
 
   /* lightbox / full-screen photo viewer */
   .lightbox{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
@@ -261,39 +265,39 @@
     <div class="plate">
       <button type="button" class="plate-img" data-piece="unicorn" aria-label="View photos of Unicorn out of Captivity">
         <img src="images/unicorn.jpg" alt="Unicorn out of Captivity — a reclining ceramic unicorn on a textured base, unglazed, on black.">
-        <span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span>
-      </button>
+              </button>
       <div class="plate-txt">
         <span class="label">Ceramic sculpture</span>
         <h3>Unicorn out of Captivity</h3>
         <p>A reclining unicorn rising from a bed of fine detail, where myth and the natural
            world meet in one form. Left unglazed, so the modeling carries the piece.</p>
+        <button type="button" class="gallery-cue" data-piece="unicorn" aria-label="View photos of Unicorn out of Captivity">View gallery <span class="arr" aria-hidden="true">&rarr;</span></button>
       </div>
     </div>
 
     <div class="plate rev">
       <button type="button" class="plate-img" data-piece="pomegranate" aria-label="View photos of Pomegranate">
         <img src="images/pomegranate.jpg" alt="Pomegranate — a round coil-built pot with a pebbled, seed-like surface, anagama-fired, on black.">
-        <span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span>
-      </button>
+              </button>
       <div class="plate-txt">
         <span class="label">Coil-built · Anagama-fired</span>
         <h3>Pomegranate</h3>
         <p>A round, seed-skinned vessel built by hand in coils and fired in a wood-burning
            anagama kiln, where the flame and ash settle into the surface.</p>
+        <button type="button" class="gallery-cue" data-piece="pomegranate" aria-label="View photos of Pomegranate">View gallery <span class="arr" aria-hidden="true">&rarr;</span></button>
       </div>
     </div>
 
     <div class="plate">
       <button type="button" class="plate-img" data-piece="honey-blocks" aria-label="View photos of Honey Blocks">
         <img src="images/honey-blocks.jpg" alt="Honey Blocks — a faceted slab-built lamp pierced with a geometric honeycomb lattice, on black.">
-        <span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span>
-      </button>
+              </button>
       <div class="plate-txt">
         <span class="label">Slab-built lamp</span>
         <h3>Honey Blocks</h3>
         <p>A faceted lamp assembled from slabs and pierced with a honeycomb lattice
            that scatters the light it holds.</p>
+        <button type="button" class="gallery-cue" data-piece="honey-blocks" aria-label="View photos of Honey Blocks">View gallery <span class="arr" aria-hidden="true">&rarr;</span></button>
       </div>
     </div>
   </div>
@@ -317,20 +321,24 @@
     </div>
     <div class="fn">
       <button type="button" class="fn-item" data-piece="mug" aria-label="View photos of Speckled mug">
-        <span class="frame"><img src="images/mug-speckled.jpg" alt="Speckled dark-glazed mug with a pierced knuckle-style handle, held in hand."><span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span></span>
+        <span class="frame"><img src="images/mug-speckled.jpg" alt="Speckled dark-glazed mug with a pierced knuckle-style handle, held in hand."><span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg></span></span>
         <span class="title">Speckled mug</span><span class="tag">Pierced handle</span>
+        <span class="gallery-cue" aria-hidden="true">View <span class="arr">&rarr;</span></span>
       </button>
       <button type="button" class="fn-item" data-piece="tumbler-green" aria-label="View photos of Footed tumbler">
-        <span class="frame"><img src="images/tumbler-green.jpg" alt="Faceted footed tumbler with a green ash glaze, held in hand outdoors."><span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span></span>
+        <span class="frame"><img src="images/tumbler-green.jpg" alt="Faceted footed tumbler with a green ash glaze, held in hand outdoors."><span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg></span></span>
         <span class="title">Footed tumbler</span><span class="tag">Ash green</span>
+        <span class="gallery-cue" aria-hidden="true">View <span class="arr">&rarr;</span></span>
       </button>
       <button type="button" class="fn-item" data-piece="bowl-ochre" aria-label="View photos of Scalloped cup">
-        <span class="frame"><img src="images/bowl-ochre.jpg" alt="Small scalloped cup with a mottled ochre glaze, held in hand."><span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span></span>
+        <span class="frame"><img src="images/bowl-ochre.jpg" alt="Small scalloped cup with a mottled ochre glaze, held in hand."><span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg></span></span>
         <span class="title">Scalloped cup</span><span class="tag">Ochre glaze</span>
+        <span class="gallery-cue" aria-hidden="true">View <span class="arr">&rarr;</span></span>
       </button>
       <button type="button" class="fn-item" data-piece="tumbler-rust" aria-label="View photos of Carved tumbler">
-        <span class="frame"><img src="images/tumbler-rust.jpg" alt="Tumbler carved with a medallion motif under a rust-and-sage iron glaze, held in hand outdoors."><span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span></span>
+        <span class="frame"><img src="images/tumbler-rust.jpg" alt="Tumbler carved with a medallion motif under a rust-and-sage iron glaze, held in hand outdoors."><span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg></span></span>
         <span class="title">Carved tumbler</span><span class="tag">Iron glaze</span>
+        <span class="gallery-cue" aria-hidden="true">View <span class="arr">&rarr;</span></span>
       </button>
     </div>
   </div>
