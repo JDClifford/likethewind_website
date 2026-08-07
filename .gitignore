@@ -12,3 +12,6 @@ node_modules/
 
 # The chat-only preview build (do not deploy — regenerate if ever needed)
 like-the-wind-preview.html
+
+# Claude Code local settings
+.claude/settings.local.json
