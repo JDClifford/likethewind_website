@@ -5,6 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Like the Wind — Breez Clifford, Ceramic Artist</title>
 <meta name="description" content="Ceramic sculpture and functional work by Breez Clifford, made by hand in Marshall, North Carolina.">
+
+<!-- Browser-tab icon -->
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<!-- Social share preview (Open Graph + Twitter) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Like the Wind — Breez Clifford, Ceramic Artist">
+<meta property="og:description" content="Ceramic sculpture and functional work, made by hand in the mountains of western North Carolina.">
+<meta property="og:image" content="https://jdclifford.github.io/likethewind_website/images/unicorn.jpg">
+<meta property="og:url" content="https://jdclifford.github.io/likethewind_website/">
+<meta property="og:site_name" content="Like the Wind">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Like the Wind — Breez Clifford, Ceramic Artist">
+<meta name="twitter:description" content="Ceramic sculpture and functional work, made by hand in the mountains of western North Carolina.">
+<meta name="twitter:image" content="https://jdclifford.github.io/likethewind_website/images/unicorn.jpg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..440&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
@@ -211,6 +227,13 @@
     .lb-img{max-height:72vh;}
   }
 
+  /* in the studio */
+  .studio-figure{margin:0;display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(1.5rem,5vw,4rem);align-items:center;}
+  @media(max-width:760px){.studio-figure{grid-template-columns:1fr;gap:1.4rem;}}
+  .studio-figure img{width:100%;height:auto;display:block;border:1px solid var(--line);}
+  .studio-figure figcaption .label{display:block;margin-bottom:.9rem;}
+  .studio-text{font-family:var(--serif);font-weight:340;font-size:clamp(1.35rem,2.6vw,1.9rem);line-height:1.3;color:var(--ink);margin:0;max-width:26ch;}
+
   :focus-visible{outline:2px solid var(--clay-deep);outline-offset:3px;}
 </style>
 </head>
@@ -341,6 +364,19 @@
         <span class="gallery-cue" aria-hidden="true">View <span class="arr">&rarr;</span></span>
       </button>
     </div>
+  </div>
+</section>
+
+<!-- IN THE STUDIO -->
+<section class="studio">
+  <div class="wrap">
+    <figure class="studio-figure">
+      <img src="images/wheel.jpg" alt="A freshly thrown clay cylinder centered on the pottery wheel in the studio.">
+      <figcaption>
+        <span class="label">In the studio</span>
+        <p class="studio-text">Thrown on the wheel or built by coil and slab, every piece begins as raw clay.</p>
+      </figcaption>
+    </figure>
   </div>
 </section>
 
