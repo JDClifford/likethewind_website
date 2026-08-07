@@ -38,19 +38,44 @@
   .nav-links a{text-decoration:none;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:var(--stone);transition:color .2s;}
   .nav-links a:hover{color:var(--clay-deep);}
   .nav-links a.ig-nav{color:var(--clay-deep);}
-  @media(max-width:640px){.nav-links{gap:1.1rem;} .nav-links a{font-size:.7rem;letter-spacing:.05em;}}
-  @media(max-width:520px){
-    .nav-links{gap:1rem;}
-    .nav-links a{font-size:.66rem;letter-spacing:.04em;}
-    .nav-links li:nth-child(2){display:none;}   /* Pots — reachable by scroll */
-    .nav-links li:nth-child(4){display:none;}   /* Instagram — kept in footer */
+
+  /* hamburger — hidden on desktop, shown on small screens */
+  .nav-burger{display:none;flex-direction:column;justify-content:center;gap:5px;
+    width:44px;height:44px;padding:10px;margin-right:-10px;background:none;border:0;cursor:pointer;}
+  .nav-burger span{display:block;height:2px;width:24px;background:var(--ink);border-radius:2px;
+    transition:transform .3s ease,opacity .2s ease;}
+
+  @media(max-width:720px){
+    .nav-burger{display:flex;}
+    /* animate the icon into an X when the menu is open */
+    header.nav.open .nav-burger span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    header.nav.open .nav-burger span:nth-child(2){opacity:0;}
+    header.nav.open .nav-burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    /* the links become a full-width dropdown panel */
+    .nav-links{
+      position:absolute;top:66px;left:0;right:0;
+      flex-direction:column;align-items:stretch;gap:0;
+      background:var(--paper);border-bottom:1px solid var(--line);
+      margin:0;padding:0;
+      max-height:0;overflow:hidden;opacity:0;pointer-events:none;
+      transition:max-height .32s cubic-bezier(.2,.7,.2,1),opacity .2s ease;
+      box-shadow:0 14px 26px -20px rgba(44,37,33,.55);}
+    header.nav.open .nav-links{max-height:70vh;opacity:1;pointer-events:auto;}
+    .nav-links li{width:100%;border-top:1px solid var(--line);}
+    .nav-links li:first-child{border-top:0;}
+    .nav-links a{display:block;width:100%;
+      padding:1rem clamp(1.25rem,5vw,3.5rem);
+      font-size:.82rem;letter-spacing:.12em;}
   }
 
   /* hero — asymmetric, image as thesis */
   .hero{position:relative;overflow:hidden;}
   .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(1.5rem,5vw,4rem);align-items:center;
-    padding:clamp(2.5rem,8vh,6rem) 0 clamp(2.5rem,7vh,5rem);}
-  @media(max-width:800px){.hero-grid{grid-template-columns:1fr;gap:2rem;}}
+    padding-top:clamp(2.5rem,8vh,6rem);padding-bottom:clamp(2.5rem,7vh,5rem);}
+  @media(max-width:800px){
+    .hero{padding-top:.5rem;}
+    .hero-grid{grid-template-columns:1fr;gap:1.75rem;
+      align-items:start;padding-top:clamp(.75rem,3vh,1.5rem);padding-bottom:clamp(2rem,6vh,3.5rem);}}
   .hero-copy{position:relative;z-index:2;}
   .hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(3.4rem,11vw,7.5rem);line-height:.94;margin:1.2rem 0 0;letter-spacing:-.01em;}
   .hero h1 em{font-style:italic;color:var(--clay);font-weight:340;}
@@ -103,8 +128,8 @@
   .fn{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(1.2rem,2.4vw,1.8rem);align-items:start;}
   @media(max-width:760px){.fn{grid-template-columns:1fr 1fr;}}
   .fn a{text-decoration:none;color:inherit;display:block;}
-  .fn .frame{background:var(--paper-2);border:1px solid var(--line);overflow:hidden;}
-  .fn .frame img{width:100%;height:auto;display:block;transition:transform .5s cubic-bezier(.2,.7,.2,1);}
+  .fn .frame{background:var(--paper-2);border:1px solid var(--line);overflow:hidden;aspect-ratio:4/5;}
+  .fn .frame img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .5s cubic-bezier(.2,.7,.2,1);}
   .fn a:hover .frame img{transform:scale(1.03);}
   .fn .title{font-family:var(--serif);font-size:1.15rem;font-weight:400;line-height:1.1;margin-top:.7rem;display:block;}
   .fn .tag{font-family:var(--sans);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);display:block;margin-top:.1rem;}
@@ -142,7 +167,10 @@
 <header class="nav">
   <div class="wrap nav-inner">
     <a href="#top" class="brandmark">Like&nbsp;the&nbsp;Wind</a>
-    <ul class="nav-links">
+    <button class="nav-burger" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-menu">
       <li><a href="#work">Work</a></li>
       <li><a href="#pots">Pots</a></li>
       <li><a href="#about">The Maker</a></li>
@@ -187,8 +215,8 @@
       <div class="plate-txt">
         <span class="label">Ceramic sculpture</span>
         <h3>Unicorn out of Captivity</h3>
-        <p>A reclining unicorn rising from a bed of fine detail — myth and the natural
-           world held in one form, left unglazed so the modeling carries the piece.</p>
+        <p>A reclining unicorn rising from a bed of fine detail, where myth and the natural
+           world meet in one form. Left unglazed, so the modeling carries the piece.</p>
       </div>
     </div>
 
@@ -217,8 +245,8 @@
 <!-- STATEMENT -->
 <section class="statement">
   <div class="wrap">
-    <p class="q">Inspired by the natural world, baroque art, and mythical creatures —
-       forms made with <b>simple palettes, to emphasize the textures and details in the work.</b></p>
+    <p class="q">Inspired by the natural world, baroque art, and mythical creatures.
+       Forms made with <b>simple palettes, to emphasize the textures and details in the work.</b></p>
     <p class="by">Breez Clifford</p>
   </div>
 </section>
@@ -266,7 +294,7 @@
       </div>
       <div class="about-body">
         <p>I was born and raised in Florida and took my first ceramics class in high
-           school — I fell in love with hand-building on my very first project.</p>
+           school. I fell in love with hand-building on my very first project.</p>
         <p>I now live in Marshall, North Carolina, and attend UNC Asheville, where I'm
            studying to become an elementary school art teacher.</p>
 
@@ -288,8 +316,6 @@
             </ul>
           </div>
         </div>
-
-        <p class="ig-line"><a href="https://www.instagram.com/breezrox/" target="_blank" rel="noopener">See more of her work on Instagram &rarr; @breezrox</a></p>
       </div>
     </div>
   </div>
@@ -304,6 +330,24 @@
     </div>
   </div>
 </footer>
+
+<script>
+  // Mobile menu: open/close the hamburger dropdown.
+  (function(){
+    var header = document.querySelector('header.nav');
+    var burger = header && header.querySelector('.nav-burger');
+    var menu   = document.getElementById('nav-menu');
+    if(!header || !burger || !menu) return;
+    function setOpen(open){
+      header.classList.toggle('open', open);
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    burger.addEventListener('click', function(){ setOpen(!header.classList.contains('open')); });
+    // Close after tapping a link, so the section you jumped to is visible.
+    menu.addEventListener('click', function(e){ if(e.target.closest('a')) setOpen(false); });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') setOpen(false); });
+  })();
+</script>
 
 </body>
 </html>
