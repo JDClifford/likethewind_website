@@ -1,0 +1,14 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Node (not used, but in case tooling is added later)
+node_modules/
+
+# The chat-only preview build (do not deploy — regenerate if ever needed)
+like-the-wind-preview.html
