@@ -104,7 +104,8 @@
   /* exhibition plates — sculptural work */
   .plate{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,5vw,4rem);align-items:center;
     margin:clamp(2rem,5vh,3.5rem) 0;}
-  .plate-img{aspect-ratio:3/2;background:#0d0b0a;border:1px solid var(--line);overflow:hidden;}
+  .plate-img{position:relative;aspect-ratio:3/2;background:#0d0b0a;border:1px solid var(--line);overflow:hidden;
+    display:block;width:100%;padding:0;margin:0;cursor:pointer;font:inherit;color:inherit;text-align:left;-webkit-appearance:none;appearance:none;}
   .plate-img img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .6s cubic-bezier(.2,.7,.2,1);}
   .plate:hover .plate-img img{transform:scale(1.03);}
   .plate-txt .label{display:block;margin-bottom:.6rem;color:var(--stone);}
@@ -127,10 +128,11 @@
   /* functional grid — pots */
   .fn{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(1.2rem,2.4vw,1.8rem);align-items:start;}
   @media(max-width:760px){.fn{grid-template-columns:1fr 1fr;}}
-  .fn a{text-decoration:none;color:inherit;display:block;}
-  .fn .frame{background:var(--paper-2);border:1px solid var(--line);overflow:hidden;aspect-ratio:4/5;}
+  .fn-item{display:block;width:100%;padding:0;margin:0;border:0;background:none;cursor:pointer;
+    font:inherit;color:inherit;text-align:left;-webkit-appearance:none;appearance:none;}
+  .fn .frame{position:relative;display:block;background:var(--paper-2);border:1px solid var(--line);overflow:hidden;aspect-ratio:4/5;}
   .fn .frame img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .5s cubic-bezier(.2,.7,.2,1);}
-  .fn a:hover .frame img{transform:scale(1.03);}
+  .fn-item:hover .frame img{transform:scale(1.03);}
   .fn .title{font-family:var(--serif);font-size:1.15rem;font-weight:400;line-height:1.1;margin-top:.7rem;display:block;}
   .fn .tag{font-family:var(--sans);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);display:block;margin-top:.1rem;}
 
@@ -158,6 +160,52 @@
   .foot-inner small{font-family:var(--sans);color:var(--stone);letter-spacing:.03em;font-size:.82rem;}
   .foot-inner .ig{font-family:var(--sans);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:var(--clay-deep);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s;}
   .foot-inner .ig:hover{border-color:var(--clay);}
+
+  /* clickable-piece affordance — the "View" badge + hover overlay */
+  .view-badge{position:absolute;right:.6rem;bottom:.6rem;z-index:3;pointer-events:none;
+    display:inline-flex;align-items:center;gap:.4rem;padding:.42rem .68rem;border-radius:999px;
+    background:rgba(20,15,12,.5);color:var(--paper);
+    font-family:var(--sans);font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;font-weight:600;
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+    transition:background .25s ease,transform .25s ease;}
+  .view-badge svg{width:13px;height:13px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .plate-img::after,.fn .frame::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(to top,rgba(20,15,12,.30),transparent 55%);opacity:0;transition:opacity .25s ease;}
+  @media(hover:hover){
+    .plate-img:hover::after,.fn-item:hover .frame::after{opacity:1;}
+    .plate-img:hover .view-badge,.fn-item:hover .view-badge{background:var(--clay-deep);transform:translateY(-2px);}
+  }
+
+  /* lightbox / full-screen photo viewer */
+  .lightbox{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+    padding:clamp(1rem,4vw,3rem);background:rgba(16,11,9,.93);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    opacity:0;visibility:hidden;transition:opacity .28s ease,visibility .28s ease;}
+  .lightbox.open{opacity:1;visibility:visible;}
+  .lb-stage{margin:0;max-width:min(1100px,100%);max-height:100%;
+    display:flex;flex-direction:column;align-items:center;gap:1rem;}
+  .lb-img{max-width:100%;max-height:78vh;width:auto;height:auto;object-fit:contain;background:#0d0b0a;
+    border:1px solid rgba(219,207,187,.25);box-shadow:0 30px 60px -30px rgba(0,0,0,.85);}
+  .lb-cap{font-family:var(--serif);font-style:italic;color:var(--paper);font-size:1.05rem;text-align:center;opacity:.92;}
+  .lb-btn{position:absolute;cursor:pointer;color:var(--paper);
+    background:rgba(242,234,221,.12);border:1px solid rgba(242,234,221,.28);
+    display:flex;align-items:center;justify-content:center;
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+    transition:background .2s ease,transform .2s ease;}
+  .lb-btn:hover{background:rgba(242,234,221,.24);}
+  .lb-close{top:clamp(.8rem,3vw,1.4rem);right:clamp(.8rem,3vw,1.4rem);width:46px;height:46px;border-radius:999px;font-size:1.6rem;line-height:1;}
+  .lb-prev,.lb-next{top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:999px;font-size:1.9rem;line-height:1;padding-bottom:4px;}
+  .lb-prev{left:clamp(.5rem,2vw,1.5rem);}
+  .lb-next{right:clamp(.5rem,2vw,1.5rem);}
+  .lb-counter{position:absolute;bottom:clamp(.8rem,3vw,1.4rem);left:50%;transform:translateX(-50%);
+    font-family:var(--sans);color:var(--paper);font-size:.72rem;letter-spacing:.14em;opacity:.72;}
+  .lightbox.single .lb-prev,.lightbox.single .lb-next,.lightbox.single .lb-counter{display:none;}
+  .lb-btn:focus-visible{outline:2px solid var(--clay);outline-offset:2px;}
+  body.lb-lock{overflow:hidden;}
+  @media(max-width:600px){
+    .lb-prev,.lb-next{width:44px;height:44px;font-size:1.6rem;}
+    .lb-img{max-height:72vh;}
+  }
 
   :focus-visible{outline:2px solid var(--clay-deep);outline-offset:3px;}
 </style>
@@ -211,7 +259,10 @@
     </div>
 
     <div class="plate">
-      <div class="plate-img"><img src="images/unicorn.jpg" alt="Unicorn out of Captivity — a reclining ceramic unicorn on a textured base, unglazed, on black."></div>
+      <button type="button" class="plate-img" data-piece="unicorn" aria-label="View photos of Unicorn out of Captivity">
+        <img src="images/unicorn.jpg" alt="Unicorn out of Captivity — a reclining ceramic unicorn on a textured base, unglazed, on black.">
+        <span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span>
+      </button>
       <div class="plate-txt">
         <span class="label">Ceramic sculpture</span>
         <h3>Unicorn out of Captivity</h3>
@@ -221,7 +272,10 @@
     </div>
 
     <div class="plate rev">
-      <div class="plate-img"><img src="images/pomegranate.jpg" alt="Pomegranate — a round coil-built pot with a pebbled, seed-like surface, anagama-fired, on black."></div>
+      <button type="button" class="plate-img" data-piece="pomegranate" aria-label="View photos of Pomegranate">
+        <img src="images/pomegranate.jpg" alt="Pomegranate — a round coil-built pot with a pebbled, seed-like surface, anagama-fired, on black.">
+        <span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span>
+      </button>
       <div class="plate-txt">
         <span class="label">Coil-built · Anagama-fired</span>
         <h3>Pomegranate</h3>
@@ -231,7 +285,10 @@
     </div>
 
     <div class="plate">
-      <div class="plate-img"><img src="images/honey-blocks.jpg" alt="Honey Blocks — a faceted slab-built lamp pierced with a geometric honeycomb lattice, on black."></div>
+      <button type="button" class="plate-img" data-piece="honey-blocks" aria-label="View photos of Honey Blocks">
+        <img src="images/honey-blocks.jpg" alt="Honey Blocks — a faceted slab-built lamp pierced with a geometric honeycomb lattice, on black.">
+        <span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span>
+      </button>
       <div class="plate-txt">
         <span class="label">Slab-built lamp</span>
         <h3>Honey Blocks</h3>
@@ -259,22 +316,22 @@
       <h2>Mugs &amp; pots</h2>
     </div>
     <div class="fn">
-      <a href="#">
-        <div class="frame"><img src="images/mug-speckled.jpg" alt="Speckled dark-glazed mug with a pierced knuckle-style handle, held in hand."></div>
+      <button type="button" class="fn-item" data-piece="mug" aria-label="View photos of Speckled mug">
+        <span class="frame"><img src="images/mug-speckled.jpg" alt="Speckled dark-glazed mug with a pierced knuckle-style handle, held in hand."><span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span></span>
         <span class="title">Speckled mug</span><span class="tag">Pierced handle</span>
-      </a>
-      <a href="#">
-        <div class="frame"><img src="images/tumbler-green.jpg" alt="Faceted footed tumbler with a green ash glaze, held in hand outdoors."></div>
+      </button>
+      <button type="button" class="fn-item" data-piece="tumbler-green" aria-label="View photos of Footed tumbler">
+        <span class="frame"><img src="images/tumbler-green.jpg" alt="Faceted footed tumbler with a green ash glaze, held in hand outdoors."><span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span></span>
         <span class="title">Footed tumbler</span><span class="tag">Ash green</span>
-      </a>
-      <a href="#">
-        <div class="frame"><img src="images/bowl-ochre.jpg" alt="Small scalloped cup with a mottled ochre glaze, held in hand."></div>
+      </button>
+      <button type="button" class="fn-item" data-piece="bowl-ochre" aria-label="View photos of Scalloped cup">
+        <span class="frame"><img src="images/bowl-ochre.jpg" alt="Small scalloped cup with a mottled ochre glaze, held in hand."><span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span></span>
         <span class="title">Scalloped cup</span><span class="tag">Ochre glaze</span>
-      </a>
-      <a href="#">
-        <div class="frame"><img src="images/tumbler-rust.jpg" alt="Tumbler carved with a medallion motif under a rust-and-sage iron glaze, held in hand outdoors."></div>
+      </button>
+      <button type="button" class="fn-item" data-piece="tumbler-rust" aria-label="View photos of Carved tumbler">
+        <span class="frame"><img src="images/tumbler-rust.jpg" alt="Tumbler carved with a medallion motif under a rust-and-sage iron glaze, held in hand outdoors."><span class="view-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M16 21h5v-5M8 21H3v-5"/></svg>View</span></span>
         <span class="title">Carved tumbler</span><span class="tag">Iron glaze</span>
-      </a>
+      </button>
     </div>
   </div>
 </section>
@@ -330,6 +387,96 @@
     </div>
   </div>
 </footer>
+
+<!-- Lightbox / full-screen photo viewer -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Piece photo viewer">
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Close viewer">&times;</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous photo">&#8249;</button>
+  <figure class="lb-stage">
+    <img class="lb-img" id="lbImg" src="" alt="">
+    <figcaption class="lb-cap" id="lbCap"></figcaption>
+  </figure>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next photo">&#8250;</button>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
+
+<script>
+  // Photo gallery / lightbox.
+  // To add more angles for a piece later: drop the files in images/ and add
+  // { src:'images/your-file.jpg', alt:'short description' } to that piece's photos array.
+  (function(){
+    var GALLERY = {
+      'unicorn': { title:'Unicorn out of Captivity', photos:[
+        { src:'images/unicorn.jpg',        alt:'Unicorn out of Captivity, full view' },
+        { src:'images/unicorn-detail.jpg', alt:'Unicorn out of Captivity, detail of the horn and mane' }
+      ]},
+      'pomegranate':  { title:'Pomegranate',    photos:[ { src:'images/pomegranate.jpg',  alt:'Pomegranate, coil-built anagama-fired vessel' } ]},
+      'honey-blocks': { title:'Honey Blocks',   photos:[ { src:'images/honey-blocks.jpg', alt:'Honey Blocks, faceted slab-built lamp' } ]},
+      'mug':          { title:'Speckled mug',   photos:[ { src:'images/mug-speckled.jpg', alt:'Speckled mug with a pierced handle' } ]},
+      'tumbler-green':{ title:'Footed tumbler', photos:[ { src:'images/tumbler-green.jpg', alt:'Footed tumbler with an ash green glaze' } ]},
+      'bowl-ochre':   { title:'Scalloped cup',  photos:[ { src:'images/bowl-ochre.jpg',    alt:'Scalloped cup with an ochre glaze' } ]},
+      'tumbler-rust': { title:'Carved tumbler', photos:[ { src:'images/tumbler-rust.jpg',  alt:'Carved tumbler with an iron glaze' } ]}
+    };
+
+    var lb        = document.getElementById('lightbox');
+    var lbImg     = document.getElementById('lbImg');
+    var lbCap     = document.getElementById('lbCap');
+    var lbCounter = document.getElementById('lbCounter');
+    var lbClose   = document.getElementById('lbClose');
+    var current = null, index = 0, lastFocus = null;
+
+    function render(){
+      var piece = GALLERY[current]; if(!piece) return;
+      var photo = piece.photos[index];
+      lbImg.src = photo.src;
+      lbImg.alt = photo.alt || piece.title;
+      lbCap.textContent = piece.title;
+      lbCounter.textContent = (index + 1) + ' / ' + piece.photos.length;
+      lb.classList.toggle('single', piece.photos.length <= 1);
+    }
+    function open(id){
+      if(!GALLERY[id]) return;
+      current = id; index = 0; lastFocus = document.activeElement;
+      render();
+      lb.classList.add('open');
+      document.body.classList.add('lb-lock');
+      lbClose.focus();
+    }
+    function close(){
+      lb.classList.remove('open');
+      document.body.classList.remove('lb-lock');
+      current = null;
+      if(lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    function step(dir){
+      var piece = GALLERY[current]; if(!piece) return;
+      var n = piece.photos.length;
+      index = (index + dir + n) % n;
+      render();
+    }
+
+    document.querySelectorAll('[data-piece]').forEach(function(el){
+      el.addEventListener('click', function(e){ e.preventDefault(); open(el.getAttribute('data-piece')); });
+    });
+    lbClose.addEventListener('click', close);
+    document.getElementById('lbPrev').addEventListener('click', function(){ step(-1); });
+    document.getElementById('lbNext').addEventListener('click', function(){ step(1); });
+    lb.addEventListener('click', function(e){ if(e.target === lb) close(); });   // click backdrop to close
+    document.addEventListener('keydown', function(e){
+      if(!lb.classList.contains('open')) return;
+      if(e.key === 'Escape') close();
+      else if(e.key === 'ArrowLeft')  step(-1);
+      else if(e.key === 'ArrowRight') step(1);
+    });
+    // Swipe between photos on touch devices.
+    var sx = 0, sy = 0;
+    lb.addEventListener('touchstart', function(e){ var t = e.changedTouches[0]; sx = t.clientX; sy = t.clientY; }, {passive:true});
+    lb.addEventListener('touchend', function(e){
+      var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+      if(Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
+    }, {passive:true});
+  })();
+</script>
 
 <script>
   // Mobile menu: open/close the hamburger dropdown.
